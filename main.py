@@ -12,17 +12,17 @@ SUBSCRIPTION_ID = os.environ.get("SUBSCRIPTION_ID")
 NAME = os.environ.get("NAME")
 
 
-def parse_vms(vm_list) -> list:
-    """Take an Azure VM list and parse it returning the VMs that match on Name
+def parse_vms(vm_dict) -> list:
+    """Take an Azure VM list and parse it returning the VMs that match on Name tag
 
     Args:
-        vm_list (dict): List of Azure VMs.
+        vm_dict (dict): Dictionary from Azure SDK containing all the VMs.
 
     Returns:
-        my_vms_list (list): List of tuples used to start VMs
+        my_vms_list (list): List of tuples containing data necessary to start VMs
     """
     my_vms_list = []
-    for vm in vm_list:
+    for vm in vm_dict:
         if (
             vm.tags
             and vm.tags.get("owner")
