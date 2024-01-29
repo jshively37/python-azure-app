@@ -37,8 +37,7 @@ def parse_vms(vm_dict) -> list:
             # I'll look to see if there is a cleaner way to return the resource group name.
             _ = vm.id.split("resourceGroups/")
             resource_group_name = _[1].split("/")[0]
-            my_vm_tuple = vm_named_tuple(resource_group_name, vm.name)
-            my_vms_list.append(my_vm_tuple)
+            my_vms_list.append(vm_named_tuple(resource_group_name, vm.name))
     return my_vms_list
 
 
@@ -50,6 +49,5 @@ if __name__ == "__main__":
     my_vms = parse_vms(compute_client.virtual_machines.list_all())
     for vm in my_vms:
         compute_client.virtual_machines.begin_start(
-            resource_group_name=vm.rg_name,
-            vm_name=vm.vm_name
+            resource_group_name=vm.rg_name, vm_name=vm.vm_name
         )
