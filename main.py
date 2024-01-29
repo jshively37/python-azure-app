@@ -1,4 +1,5 @@
 import os
+from collections import namedtuple
 
 try:
     from azure.identity import DefaultAzureCredential
@@ -21,6 +22,7 @@ def parse_vms(vm_dict) -> list:
     Returns:
         my_vms_list (list): List of tuples containing data necessary to start VMs
     """
+    vm_named_tuple = namedtuple("resource_group_name", "rg_name vm_name")
     my_vms_list = []
     for vm in vm_dict:
         if (
@@ -28,8 +30,15 @@ def parse_vms(vm_dict) -> list:
             and vm.tags.get("owner")
             and NAME.lower() in vm.tags["owner"].lower()
         ):
-            _ = (vm.name, vm.id)
-            my_vms_list.append(_)
+            # We need to pass the resource group name to start the VM. The only reference group
+            # reference in the data returned in list_all is the id which is the API endpoint.
+            # We can split on vm id using resourceGroups/ and then / again to return the resource
+            # group.
+            # I'll look to see if there is a cleaner way to return the resource group name.
+            _ = vm.id.split("resourceGroups/")
+            resource_group_name = _[1].split("/")[0]
+            my_vm_tuple = vm_named_tuple(resource_group_name, vm.name)
+            my_vms_list.append(my_vm_tuple)
     return my_vms_list
 
 
@@ -40,4 +49,7 @@ if __name__ == "__main__":
     )
     my_vms = parse_vms(compute_client.virtual_machines.list_all())
     for vm in my_vms:
-        print(vm)
+        compute_client.virtual_machines.begin_start(
+            resource_group_name=vm.rg_name,
+            vm_name=vm.vm_name
+        )
