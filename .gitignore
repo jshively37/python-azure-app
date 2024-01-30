@@ -162,3 +162,5 @@ cython_debug/
 # Local
 *.local
 .DS_Store
+Pipfile
+Pipfile.*
