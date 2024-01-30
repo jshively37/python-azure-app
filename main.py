@@ -53,7 +53,7 @@ if __name__ == "__main__":
     my_vms = parse_vms(compute_client.virtual_machines.list_all())
     for vm in my_vms:
         response = input(
-            f"Do you want to start {vm.vm_name} found in {vm.rg_name} (Y/N)? "
+            f"Do you want to start {vm.vm_name} found in {vm.rg_name} (Y/N) or press Q to exit? "
         )
         if response.lower() == "y":
             try:
@@ -64,3 +64,5 @@ if __name__ == "__main__":
                 print(f"Started vm: {vm.vm_name}")
             except HttpResponseError:
                 print("Something went wrong.")
+        if response.lower() == "q":
+            sys.exit("User pressed Q to exit")
