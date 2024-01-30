@@ -12,7 +12,9 @@ cryptography==42.0.1
 flake8==7.0.0
 idna==3.6
 isodate==0.6.1
+markdown-it-py==3.0.0
 mccabe==0.7.0
+mdurl==0.1.2
 msal==1.26.0
 msal-extensions==1.1.0
 mypy-extensions==1.0.0
@@ -23,6 +25,7 @@ portalocker==2.8.2
 pycodestyle==2.11.1
 pycparser==2.21
 pyflakes==3.2.0
+Pygments==2.17.2
 PyJWT==2.8.0
 python-dotenv==1.0.1
 requests==2.31.0
