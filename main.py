@@ -34,7 +34,7 @@ def parse_vms(vm_dict) -> list:
             and vm.tags.get("owner")
             and NAME.lower() in vm.tags["owner"].lower()
         ):
-            # We need to pass the resource group name to start the VM. The only reference groupalkfjlkdajflkjlkdajlkfdjlksjlksjlkfjlksjdkl
+            # We need to pass the resource group name to start the VM. The only reference group
             # reference in the data returned in list_all is the id which is the API endpoint.
             # We can split on vm id using resourceGroups/ and then / again to return the resource
             # group.
