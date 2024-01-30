@@ -1,12 +1,16 @@
 import os
+import sys
 from collections import namedtuple
 
 try:
     from azure.identity import DefaultAzureCredential
     from azure.mgmt.compute import ComputeManagementClient
+    from azure.core.exceptions import (
+        HttpResponseError,
+    )
     from dotenv import load_dotenv
 except ImportError:
-    print("Please run pip install -r requirements.txt")
+    sys.exit("Please run pip install -r requirements.txt")
 
 load_dotenv()
 SUBSCRIPTION_ID = os.environ.get("SUBSCRIPTION_ID")
@@ -48,6 +52,15 @@ if __name__ == "__main__":
     )
     my_vms = parse_vms(compute_client.virtual_machines.list_all())
     for vm in my_vms:
-        compute_client.virtual_machines.begin_start(
-            resource_group_name=vm.rg_name, vm_name=vm.vm_name
+        response = input(
+            f"Do you want to start {vm.vm_name} found in {vm.rg_name} (Y/N)? "
         )
+        if response.lower() == "y":
+            try:
+                print(f"Attempting to start vm: {vm.vm_name}")
+                compute_client.virtual_machines.begin_start(
+                    resource_group_name=vm.rg_name, vm_name=vm.vm_name
+                )
+                print(f"Started vm: {vm.vm_name}")
+            except HttpResponseError:
+                print("Something went wrong.")
